@@ -541,3 +541,74 @@ Auditing elevated access management can be a stressful and time-consuming proces
 Continue Reading](https://pathlock.com/pathlock-elevated-access-management/)
 
 Qualified
+[Skip to content](https://sapsecurityanalyst.com/WP/sap-security-audit-guidelines-part-ii/?utm_source=chatgpt.com#content)
+
+# SAP Security Audit Guidelines – Part II
+
+This post is part 2 of our discussion on SAP Security Audit Guidelines. In the [previous post](https://sapsecurityanalyst.com/WP/home/sap-security-audit-guidelines-part-i), we had discussed about some of the important points which need to be followed for SAP Security Audit Guidelines. We would continue to do so in this part as well and try to cover as many important points as possible.
+
+### List of some common tables for which table logging should be enabled
+
+| ## Table | ## Description |
+| --- | --- |
+| ### T000 | ### List of clients |
+| ### T001 | ### Company Codes |
+| ### TSTC | ### Definition of tcodes |
+| ### TOBJ | ### Definition of Authorization objects |
+| ### TACTZ | ### Valid activities |
+| ### TSTCP | ### Parameters for Transactions |
+| ### TPGP | ### Authorization Groups for Programs |
+| ### TBRG | ### Authorization Groups for Tables |
+| ### TDDAT | ### Table to Authorization group mapping |
+| ### TNRO | ### Definition of number range objects |
+| ### TSTCA | ### Values for Transaction code authorizations |
+|  |  |
+
+Some transaction codes are very critical and should not be assigned to any one in production system and should be locked. Also, there are some transaction codes which should only be assigned to Basis or Security team or to some super user roles. These super user roles can be assigned for temporary period of time based on emergency requirements after following a proper approval process. Below is a list of a few such critical transaction codes:
+
+### Critical Transaction Codes in Production:
+
+| ## Transaction Code | ## Description | ## Assignment Status in Production |
+| --- | --- | --- |
+| ### SU01 | ### Create User | ### Security Team |
+| ### SU10 | ### Mass User creation | ### Security Team |
+| ### PFCG | ### Role Maintenance | ### Display only version to Security Team |
+| ### ST01 | ### System Trace | ### Basis/Security Team |
+| ### SM19 | ### Security Audit Configuration | ### Basis/Security Team |
+| ### SM20 | ### Analysis of Security Audit Log | ### Basis/Security Team |
+| ### SM18 | ### Reorganize Security Audit Log | ### Basis Team |
+| ### EWZ5 | ### Lock Users | ### Security Team |
+| ### RZ10 | ### Maintain Profile Parameters | ### Basis Team |
+| ### SM12 | ### Display and Delete Locks | ### Basis Team |
+| ### SM04 | ### User List | ### Basis Team |
+| ### SM59 | ### RFC Destinations (Display/Maintain) | ### Basis Team |
+| ### SA38 | ### ABAP Reporting | ### Super User Role |
+| ### SP01 | ### Output Controller | ### Basis Team |
+| ### SECATT | ### Extended Computer Aided Test Tool | ### Super User Role |
+| ### SCC4 | ### Client Administration | ### Locked |
+| ### SE09 / SE10 | ### Transport Organizer | ### Locked |
+| ### SM49 | ### Execute external OS commands | ### Locked |
+| ### SM69 | ### Maintain External OS Commands | ### Locked |
+| ### SHD0 | ### Transaction and Screen Variants | ### Locked |
+| ### SE38 | ### ABAP Editor | ### Locked |
+| ### SE93 | ### Maintain Transaction Codes | ### Locked |
+|  |  |  |
+
+### Lets have a look at some of the critical authorization objects in SAP. From Audit perspective, it is pertinent that special care must be taken while assigning full access ‘\*’ to any field value.
+
+- S\_PROGRAM – All critical programs and reports should be linked with proper authorization groups. Appropriate action should be maintained for this object.
+- S\_TABU\_DIS – Caution should be taken while maintaining change access for this object.
+- S\_TABU\_CLI – Access to this object should be strictly restricted.
+- S\_TCODE – Make sure that this authorization object does not give access ‘\*’ access or access to big ranges using wildcards on the TCD field.
+- S\_DEVELOP – Should be assigned with caution. Make sure not to give the change – debug access in production.
+- S\_RZL\_ADM – For R/3 System administration using the CCMS. This should only be required by Basis.
+- S\_ADMI\_FCD – For checking access to some Basis functions, like spool administration and monitoring. Normally for Basis Team only.
+- S\_BTCH\_ADM – For processing background jobs. Only needed by Basis or Background admin.
+- S\_BDC\_MONI – For batch input management and monitoring – Can be assigned to Functional Team when they upload data using LSMW
+- S\_CTS\_ADMI – For administration functions in the Change and Transport System. Only to Basis.
+- S\_LOG\_COM – For executing external operating system commands – Only to Basis.
+- S\_TRANSPRT – For transport organizer – Only to Basis.
+- S\_DATASET – For accessing files from ABAP/4 programs. ABAP Program name and File Path should be maintained with caution.
+- S\_USER\_\* – Should be maintained very carefully. Make sure to give display access (activity 03) only. For Security Team.
+
+* * *
